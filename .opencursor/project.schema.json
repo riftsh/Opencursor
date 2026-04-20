@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "OpenCursor Project Configuration. Defines the environment, build, and run commands for AI agents.",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string", "description": "Project name" },
+    "install": { "type": "string", "description": "Command to install dependencies (e.g., 'npm install')" },
+    "build": { "type": "string", "description": "Command to build the project" },
+    "start": { "type": "string", "description": "Command to start the dev server" },
+    "test": { "type": "string", "description": "Command to run tests" },
+    "ports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "port": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "agentInstructions": {
+      "type": "string",
+      "description": "Specific instructions for the AI agent when working on this project"
+    }
+  }
+}

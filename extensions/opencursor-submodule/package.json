@@ -1,0 +1,118 @@
+{
+  "name": "opencursor-agent",
+  "displayName": "OpenCursor Agent",
+  "description": "Advanced AI agent with 400+ provider integrations, multi-agent collaboration, and terminal command execution",
+  "version": "2.0.0",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "assistant",
+    "chat",
+    "copilot",
+    "agent",
+    "terminal",
+    "automation",
+    "multi-agent"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opencursor.openChat",
+        "title": "Open OpenCursor Chat",
+        "category": "OpenCursor"
+      },
+      {
+        "command": "opencursor.inlineChat",
+        "title": "Start Inline Chat",
+        "category": "OpenCursor"
+      },
+      {
+        "command": "opencursor.executeTerminal",
+        "title": "Execute Terminal Command",
+        "category": "OpenCursor"
+      },
+      {
+        "command": "opencursor.multiAgentSession",
+        "title": "Start Multi-Agent Session",
+        "category": "OpenCursor"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "opencursor.inlineChat",
+        "key": "cmd+l",
+        "mac": "cmd+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "opencursor.openChat",
+        "key": "cmd+shift+i",
+        "mac": "cmd+shift+i"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "opencursorChatView",
+          "name": "OpenCursor Agent",
+          "when": "opencursor.chatVisible"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "OpenCursor Agent",
+      "properties": {
+        "opencursor.provider": {
+          "type": "string",
+          "default": "claude-3.5-sonnet",
+          "description": "Default AI provider"
+        },
+        "opencursor.enableMultiAgent": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable multi-agent collaboration"
+        },
+        "opencursor.terminalCommands": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow AI to execute terminal commands"
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onCommand:opencursor.openChat",
+    "onCommand:opencursor.inlineChat",
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "openai": "^4.20.0",
+    "socket.io-client": "^4.7.0"
+  }
+}

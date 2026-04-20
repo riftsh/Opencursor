@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+
+set -e
+
+# ===========================================================================
+# CONFIGURATION SECTION - Edit these variables to match your environment
+# ===========================================================================
+
+# Path to OpenCursor-Roo-Code extension
+OPENCURSOR_ROO_CODE_PATH="extensions/OpenCursor-Roo-Code"
+
+# Path to opencursor-submodule vscode extension
+OPENCURSOR_SUBMODULE_PATH="extensions/opencursor-submodule/extensions/vscode"
+
+# Enable/disable building opencursor submodule before launch (uncomment to enable)
+BUILD_OPENCURSOR_SUBMODULE=false
+
+# ===========================================================================
+# END CONFIGURATION SECTION
+# ===========================================================================
+
+# Build opencursor submodule if enabled
+if [[ "$BUILD_OPENCURSOR_SUBMODULE" == "true" ]]; then
+  # Only build if it hasn't been built yet (e.g. if node_modules is missing)
+  if [ ! -d "extensions/opencursor-submodule/node_modules" ]; then
+    echo "Building opencursor-submodule..."
+    cd extensions/opencursor-submodule
+    ./scripts/install-and-build.sh --fast
+    cd ../..
+  else
+    echo "opencursor-submodule already built, skipping build step..."
+  fi
+fi
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	realpath() { [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"; }
+	ROOT=$(dirname "$(dirname "$(realpath "$0")")")
+else
+	ROOT=$(dirname "$(dirname "$(readlink -f $0)")")
+	# If the script is running in Docker using the WSL2 engine, powershell.exe won't exist
+	if grep -qi Microsoft /proc/version && type powershell.exe > /dev/null 2>&1; then
+		IN_WSL=true
+	fi
+fi
+
+# Default paths for extension development - using relative paths from ROOT
+EXTENSION_PATHS=(
+    "${ROOT}/extensions/vscode"
+)
+
+# Add OpenCursor extensions
+if [[ -d "${ROOT}/${OPENCURSOR_ROO_CODE_PATH}" ]]; then
+    EXTENSION_PATHS+=("${ROOT}/${OPENCURSOR_ROO_CODE_PATH}")
+else
+    echo "Warning: OpenCursor-Roo-Code extension path not found at ${ROOT}/${OPENCURSOR_ROO_CODE_PATH}"
+fi
+
+if [[ -d "${ROOT}/${OPENCURSOR_SUBMODULE_PATH}" ]]; then
+    EXTENSION_PATHS+=("${ROOT}/${OPENCURSOR_SUBMODULE_PATH}")
+else
+    echo "Warning: OpenCursor submodule vscode extension path not found at ${ROOT}/${OPENCURSOR_SUBMODULE_PATH}"
+fi
+
+# Function to check if directory exists and add to extension paths
+add_extension_path() {
+    if [ -d "$1" ]; then
+        EXTENSION_PATHS+=("$1")
+    else
+        echo "Warning: Extension path $1 does not exist, skipping..."
+    fi
+}
+
+# Process command line arguments for extension paths
+process_args() {
+    local i=1
+    while [ $i -le $# ]; do
+        arg="${!i}"
+        if [[ "$arg" == "--ext-path="* ]]; then
+            path="${arg#*=}"
+            add_extension_path "$path"
+        elif [[ "$arg" == "--ext-path" && $(($i + 1)) -le $# ]]; then
+            j=$(($i + 1))
+            path="${!j}"
+            add_extension_path "$path"
+            ((i++))
+        fi
+        ((i++))
+    done
+}
+
+function code() {
+	cd "$ROOT"
+
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		NAME=$(node -p "require('./product.json').nameLong")
+		CODE="./.build/electron/$NAME.app/Contents/MacOS/Electron"
+	else
+		NAME=$(node -p "require('./product.json').applicationName")
+		CODE=".build/electron/$NAME"
+	fi
+
+	# Get electron, compile, built-in extensions
+	if [[ "$@" == *"--skip-build"* ]]; then
+		export SKIP_BUILD=true
+	fi
+
+	if [[ -z "${VSCODE_SKIP_PRELAUNCH}" ]]; then
+		node build/lib/preLaunch.js
+	fi
+
+	# Manage built-in extensions
+	if [[ "$1" == "--builtin" ]]; then
+		exec "$CODE" build/builtin
+		return
+	fi
+
+	# Configuration
+	# export NODE_ENV="development"
+	export VSCODE_DEV=1
+	export VSCODE_CLI=1
+	export ELECTRON_ENABLE_STACK_DUMPING=1
+	export ELECTRON_ENABLE_LOGGING=1
+
+	DISABLE_TEST_EXTENSION="--disable-extension=vscode.vscode-api-tests"
+	if [[ "$@" == *"--extensionTestsPath"* ]]; then
+		DISABLE_TEST_EXTENSION=""
+	fi
+
+	# Process extension paths from command line
+	process_args "$@"
+
+	# Define sandbox test path
+	SANDBOX_TEST_PATH="${ROOT}/extensions/vscode/manual-testing-sandbox/test.js"
+
+	# Check if sandbox test file exists
+	if [[ -f "$SANDBOX_TEST_PATH" ]]; then
+		SANDBOX_ARG="$SANDBOX_TEST_PATH"
+	else
+		SANDBOX_ARG=""
+	fi
+
+	# Prepare extension development path arguments
+	EXT_DEV_ARGS=""
+	for path in "${EXTENSION_PATHS[@]}"; do
+		EXT_DEV_ARGS="$EXT_DEV_ARGS --extensionDevelopmentPath=$path"
+	done
+
+	# Show which extensions are being loaded
+	echo "Loading extensions from:"
+	for path in "${EXTENSION_PATHS[@]}"; do
+		echo " - $path"
+	done
+
+	# Launch Code with extension paths
+	if [[ -n "$SANDBOX_ARG" ]]; then
+		echo "Using sandbox test file: $SANDBOX_ARG"
+		exec "$CODE" . "$SANDBOX_ARG" $DISABLE_TEST_EXTENSION $EXT_DEV_ARGS "$@"
+	else
+		exec "$CODE" . $DISABLE_TEST_EXTENSION $EXT_DEV_ARGS "$@"
+	fi
+}
+
+function code-wsl()
+{
+	HOST_IP=$(echo "" | powershell.exe -noprofile -Command "& {(Get-NetIPAddress | Where-Object {\$_.InterfaceAlias -like '*WSL*' -and \$_.AddressFamily -eq 'IPv4'}).IPAddress | Write-Host -NoNewline}")
+	export DISPLAY="$HOST_IP:0"
+
+	# in a wsl shell
+	ELECTRON="$ROOT/.build/electron/$NAME.exe"
+	if [ -f "$ELECTRON"  ]; then
+		local CWD=$(pwd)
+		cd $ROOT
+		export WSLENV=ELECTRON_RUN_AS_NODE/w:VSCODE_DEV/w:$WSLENV
+		local WSL_EXT_ID="ms-vscode-remote.remote-wsl"
+		local WSL_EXT_WLOC=$(echo "" | VSCODE_DEV=1 ELECTRON_RUN_AS_NODE=1 "$ROOT/.build/electron/$NAME.exe" "out/cli.js" --locate-extension $WSL_EXT_ID)
+		cd $CWD
+		if [ -n "$WSL_EXT_WLOC" ]; then
+			# replace \r\n with \n in WSL_EXT_WLOC
+			local WSL_CODE=$(wslpath -u "${WSL_EXT_WLOC%%[[:cntrl:]]}")/scripts/wslCode-dev.sh
+			$WSL_CODE "$ROOT" "$@"
+			exit $?
+		else
+			echo "Remote WSL not installed, trying to run VSCode in WSL."
+		fi
+	fi
+}
+
+if [ "$IN_WSL" == "true" ] && [ -z "$DISPLAY" ]; then
+	code-wsl "$@"
+elif [ -f /mnt/wslg/versions.txt ]; then
+	code --disable-gpu "$@"
+elif [ -f /.dockerenv ]; then
+	# Workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=1263267
+	# Chromium does not release shared memory when streaming scripts
+	# which might exhaust the available resources in the container environment
+	# leading to failed script loading.
+	code --disable-dev-shm-usage "$@"
+else
+	code "$@"
+fi
+
+exit $?

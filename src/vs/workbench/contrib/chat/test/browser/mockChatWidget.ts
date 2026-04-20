@@ -1,0 +1,27 @@
+import { Event } from '../../../../../base/common/event.js';
+import { URI } from '../../../../../base/common/uri.js';
+import { IChatWidget, IChatWidgetService } from '../../browser/chat.js';
+import { ChatAgentLocation } from '../../common/chatAgents.js';
+
+export class MockChatWidgetService implements IChatWidgetService {
+	readonly onDidAddWidget: Event<IChatWidget> = Event.None;
+
+	readonly _serviceBrand: undefined;
+
+	/**
+	 * Returns the most recently focused widget if any.
+	 */
+	readonly lastFocusedWidget: IChatWidget | undefined;
+
+	getWidgetByInputUri(uri: URI): IChatWidget | undefined {
+		return undefined;
+	}
+
+	getWidgetBySessionId(sessionId: string): IChatWidget | undefined {
+		return undefined;
+	}
+
+	getWidgetsByLocations(location: ChatAgentLocation): ReadonlyArray<IChatWidget> {
+		return [];
+	}
+}

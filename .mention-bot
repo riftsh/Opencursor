@@ -1,0 +1,7 @@
+{
+  "maxReviewers": 2,
+  "requiredOrgs": ["Riftsh"],
+  "skipAlreadyAssignedPR": true,
+  "skipAlreadyMentionedPR": true,
+  "skipCollaboratorPR": true
+}

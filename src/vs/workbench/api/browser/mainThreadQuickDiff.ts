@@ -1,0 +1,45 @@
+import { CancellationToken } from '../../../base/common/cancellation.js';
+import { DisposableMap, IDisposable } from '../../../base/common/lifecycle.js';
+import { URI, UriComponents } from '../../../base/common/uri.js';
+import { ExtHostContext, ExtHostQuickDiffShape, IDocumentFilterDto, MainContext, MainThreadQuickDiffShape } from '../common/extHost.protocol.js';
+import { IQuickDiffService, QuickDiffProvider } from '../../contrib/scm/common/quickDiff.js';
+import { extHostNamedCustomer, IExtHostContext } from '../../services/extensions/common/extHostCustomers.js';
+
+@extHostNamedCustomer(MainContext.MainThreadQuickDiff)
+export class MainThreadQuickDiff implements MainThreadQuickDiffShape {
+
+	private readonly proxy: ExtHostQuickDiffShape;
+	private providerDisposables = new DisposableMap<number, IDisposable>();
+
+	constructor(
+		extHostContext: IExtHostContext,
+		@IQuickDiffService private readonly quickDiffService: IQuickDiffService
+	) {
+		this.proxy = extHostContext.getProxy(ExtHostContext.ExtHostQuickDiff);
+	}
+
+	async $registerQuickDiffProvider(handle: number, selector: IDocumentFilterDto[], label: string, rootUri: UriComponents | undefined, visible: boolean): Promise<void> {
+		const provider: QuickDiffProvider = {
+			label,
+			rootUri: URI.revive(rootUri),
+			selector,
+			isSCM: false,
+			visible,
+			getOriginalResource: async (uri: URI) => {
+				return URI.revive(await this.proxy.$provideOriginalResource(handle, uri, CancellationToken.None));
+			}
+		};
+		const disposable = this.quickDiffService.addQuickDiffProvider(provider);
+		this.providerDisposables.set(handle, disposable);
+	}
+
+	async $unregisterQuickDiffProvider(handle: number): Promise<void> {
+		if (this.providerDisposables.has(handle)) {
+			this.providerDisposables.deleteAndDispose(handle);
+		}
+	}
+
+	dispose(): void {
+		this.providerDisposables.dispose();
+	}
+}

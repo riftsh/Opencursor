@@ -1,0 +1,54 @@
+diff --git a/node_modules/@modelcontextprotocol/sdk/dist/cjs/client/auth.js b/node_modules/@modelcontextprotocol/sdk/dist/cjs/client/auth.js
+index f89657f..5f4a03b 100644
+--- a/node_modules/@modelcontextprotocol/sdk/dist/cjs/client/auth.js
++++ b/node_modules/@modelcontextprotocol/sdk/dist/cjs/client/auth.js
+@@ -254,6 +254,8 @@ async function authInternal(provider, { serverUrl, authorizationCode, scope, res
+     // Handle token refresh or new authorization
+     if (tokens?.refresh_token) {
+         try {
++            // [CURSOR PATCH] Allow the provider to coordinate concurrent refreshes
++            await provider.prepareForRefresh?.();
+             // Attempt to refresh the token
+             const newTokens = await refreshAuthorization(authorizationServerUrl, {
+                 metadata,
+@@ -267,6 +269,13 @@ async function authInternal(provider, { serverUrl, authorizationCode, scope, res
+             return 'AUTHORIZED';
+         }
+         catch (error) {
++            // [CURSOR PATCH] Re-throw SiblingAlreadyRefreshedError so the FSM
++            // can reconnect with the winner's fresh tokens instead of starting
++            // a redundant full re-authorization flow.
++            if (error && error.name === 'SiblingAlreadyRefreshedError') { throw error; }
++            // [CURSOR PATCH] Release the refresh lease acquired in prepareForRefresh
++            // so sibling providers are not blocked until TTL expiry.
++            await provider.releaseRefreshLeaseOnError?.();
+             // If this is a ServerError, or an unknown type, log it out and try to continue. Otherwise, escalate so we can fix things and retry.
+             if (!(error instanceof errors_js_1.OAuthError) || error instanceof errors_js_1.ServerError) {
+                 // Could not refresh OAuth tokens
+diff --git a/node_modules/@modelcontextprotocol/sdk/dist/esm/client/auth.js b/node_modules/@modelcontextprotocol/sdk/dist/esm/client/auth.js
+index de86ff9..b36d135 100644
+--- a/node_modules/@modelcontextprotocol/sdk/dist/esm/client/auth.js
++++ b/node_modules/@modelcontextprotocol/sdk/dist/esm/client/auth.js
+@@ -230,6 +230,8 @@ async function authInternal(provider, { serverUrl, authorizationCode, scope, res
+     // Handle token refresh or new authorization
+     if (tokens?.refresh_token) {
+         try {
++            // [CURSOR PATCH] Allow the provider to coordinate concurrent refreshes
++            await provider.prepareForRefresh?.();
+             // Attempt to refresh the token
+             const newTokens = await refreshAuthorization(authorizationServerUrl, {
+                 metadata,
+@@ -243,6 +245,13 @@ async function authInternal(provider, { serverUrl, authorizationCode, scope, res
+             return 'AUTHORIZED';
+         }
+         catch (error) {
++            // [CURSOR PATCH] Re-throw SiblingAlreadyRefreshedError so the FSM
++            // can reconnect with the winner's fresh tokens instead of starting
++            // a redundant full re-authorization flow.
++            if (error && error.name === 'SiblingAlreadyRefreshedError') { throw error; }
++            // [CURSOR PATCH] Release the refresh lease acquired in prepareForRefresh
++            // so sibling providers are not blocked until TTL expiry.
++            await provider.releaseRefreshLeaseOnError?.();
+             // If this is a ServerError, or an unknown type, log it out and try to continue. Otherwise, escalate so we can fix things and retry.
+             if (!(error instanceof OAuthError) || error instanceof ServerError) {
+                 // Could not refresh OAuth tokens
