@@ -1,7 +1,7 @@
 {
 	"nameShort": "OpenCursor",
 	"nameLong": "OpenCursor",
-	"pearAIVersion": "2.0.0",
+	"OpencursorVersion": "2.0.0",
 	"applicationName": "opencursor",
 	"dataFolderName": ".opencursor",
 	"win32MutexName": "opencursor",
@@ -1670,8 +1670,8 @@
 	"cesSurveyUrl": "https://aka.ms/new-to-vscode-feedback",
 	"checksumFailMoreInfoUrl": "https://go.microsoft.com/fwlink/?LinkId=828886",
 	"settingsSearchUrl": "https://bingsettingssearch.trafficmanager.net/api/Search",
-	"pearAIHomepageURL": "github.com/riftsh/opencursor",
-	"pearAILinks": {
+	"OpencursorHomepageURL": "github.com/riftsh/opencursor",
+	"OpencursorLinks": {
 		"homepage": "github.com/riftsh/opencursor",
 		"dashboard": "github.com/riftsh/opencursor",
 		"faq": "github.com/riftsh/opencursor/discussions",

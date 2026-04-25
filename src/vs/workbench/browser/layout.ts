@@ -679,19 +679,20 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			runtime: layoutRuntimeState,
 		};
 
-		// Sidebar View Container To Restore
+		// Sidebar View Container To Restore - OpenCursor extension on startup
 		if (this.isVisible(Parts.SIDEBAR_PART)) {
+			// Force OpenCursor extension to open on startup
+			const opencursorViewContainer = this.viewDescriptorService.getViewContainerById('workbench.view.extension.opencursor');
+			let viewContainerToRestore: string | undefined = opencursorViewContainer?.id;
 
 			// Only restore last viewlet if window was reloaded or we are in development mode
-			let viewContainerToRestore: string | undefined;
 			if (
 				!this.environmentService.isBuilt ||
 				lifecycleService.startupKind === StartupKind.ReloadedWindow ||
 				this.environmentService.isExtensionDevelopment && !this.environmentService.extensionTestsLocationURI
 			) {
-				viewContainerToRestore = this.storageService.get(SidebarPart.activeViewletSettingsKey, StorageScope.WORKSPACE, this.viewDescriptorService.getDefaultViewContainer(ViewContainerLocation.Sidebar)?.id);
-			} else {
-				viewContainerToRestore = this.viewDescriptorService.getDefaultViewContainer(ViewContainerLocation.Sidebar)?.id;
+				// Still prefer OpenCursor on startup, fallback to stored value only if OpenCursor not available
+				viewContainerToRestore = viewContainerToRestore || this.storageService.get(SidebarPart.activeViewletSettingsKey, StorageScope.WORKSPACE, this.viewDescriptorService.getDefaultViewContainer(ViewContainerLocation.Sidebar)?.id);
 			}
 
 			if (viewContainerToRestore) {

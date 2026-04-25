@@ -45,7 +45,7 @@ export class TerminalExecutor {
 
             // Execute the command
             const result = await this.runTerminalCommand(command);
-            
+
             this.outputChannel.appendLine(result);
             return result;
 
@@ -59,7 +59,7 @@ export class TerminalExecutor {
 
     private async interpretCommand(naturalCommand: string): Promise<string> {
         const agent = this.getAgent();
-        
+
         const prompt = `Convert this natural language request into a terminal command:
 Request: "${naturalCommand}"
 Return only the command, no explanation.`;
@@ -89,7 +89,7 @@ Return only the command, no explanation.`;
             const outputDisposable = vscode.window.onDidWriteTerminalData(e => {
                 if (e.terminal === this.terminal) {
                     output += e.data;
-                    
+
                     // Check for command completion indicators
                     if (e.data.includes('$') || e.data.includes('%') || e.data.includes('>')) {
                         if (!commandCompleted && output.length > command.length) {
@@ -186,7 +186,10 @@ Return only the command, no explanation.`;
             'ruby': '.rb',
             'swift': '.swift',
             'kotlin': '.kt',
-            'scala': '.scala'
+            'scala': '.scala',
+            'dart': '.dart',
+
+
         };
 
         const extension = extensionMap[language.toLowerCase()];
@@ -195,7 +198,7 @@ Return only the command, no explanation.`;
         try {
             // Create temp directory and write code
             await this.executeCommand(`mkdir -p ${tempDir}`);
-            
+
             // Write code to file (using echo and redirection)
             const escapedCode = code.replace(/"/g, '\\"').replace(/\$/g, '\\$');
             await this.executeCommand(`echo "${escapedCode}" > ${tempFile}`);
@@ -214,10 +217,10 @@ Return only the command, no explanation.`;
             }
 
             const result = await this.executeCommand(command);
-            
+
             // Cleanup
             await this.executeCommand(`rm -f ${tempFile} ${tempDir}/temp`);
-            
+
             return result;
 
         } catch (error) {
@@ -234,19 +237,19 @@ Return only the command, no explanation.`;
 
     public async executeShellScript(script: string): Promise<string> {
         const tempScript = '/tmp/opencursor_script.sh';
-        
+
         try {
             // Write script to file
             const escapedScript = script.replace(/"/g, '\\"').replace(/\$/g, '\\$');
             await this.executeCommand(`echo "${escapedScript}" > ${tempScript}`);
             await this.executeCommand(`chmod +x ${tempScript}`);
-            
+
             // Execute script
             const result = await this.executeCommand(`bash ${tempScript}`);
-            
+
             // Cleanup
             await this.executeCommand(`rm -f ${tempScript}`);
-            
+
             return result;
 
         } catch (error) {
@@ -258,7 +261,7 @@ Return only the command, no explanation.`;
 
     public async getSystemInfo(): Promise<{ [key: string]: string }> {
         const info: { [key: string]: string } = {};
-        
+
         try {
             info.os = await this.executeCommand('uname -s');
             info.arch = await this.executeCommand('uname -m');
@@ -269,18 +272,18 @@ Return only the command, no explanation.`;
             info.home = await this.executeCommand('echo $HOME');
             info.pwd = await this.executeCommand('pwd');
             info.date = await this.executeCommand('date');
-            
+
             // Get memory info
             if (info.os.includes('Darwin')) {
                 info.memory = await this.executeCommand('vm_stat | grep "Pages free"');
             } else {
                 info.memory = await this.executeCommand('free -h');
             }
-            
+
         } catch (error) {
             console.error('Error getting system info:', error);
         }
-        
+
         return info;
     }
 
@@ -298,3 +301,4 @@ Return only the command, no explanation.`;
         this.outputChannel.dispose();
     }
 }
+console.log("if you found uwu")

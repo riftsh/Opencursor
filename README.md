@@ -1,49 +1,67 @@
-# OpenCursor: The Open-Source AI-Powered Code Editor 🚀
+# OpenCursor
 
-**OpenCursor** is a high-performance, AI-native fork of VSCode designed for the "Bring Your Own Key" (BYOK) generation. We combine the power of agentic AI with the familiarity of VSCode to create a seamless, private, and 100% free development experience.
+An open-source AI code editor forked from VS Code. Bring your own API keys.
 
----
+## What is this?
 
-## 💎 The OpenCursor Philosophy
+OpenCursor is a VS Code fork with built-in AI features. Unlike Cursor or GitHub Copilot, we don't lock you into a subscription. Use your own OpenAI, Anthropic, or Gemini API keys.
 
-Most AI editors lock you into a subscription. **OpenCursor is different.**
-- **BYOK**: Use your own API keys for Claude, OpenAI, or Gemini. No middleman.
-- **Privacy-First**: Support for 100% offline development via Ollama.
-- **Agentic Core**: Built-in specialist agents for system architecture and automated code review.
+**Key points:**
+- BYOK (Bring Your Own Key) - use your own API keys
+- Works offline with Ollama for local AI
+- Free and open source under Apache 2.0
 
----
+## Building
 
-## ✨ Features
+**Requirements:**
+- Node.js 18+
+- npm or yarn
+- Git
+- Python 3.8+
 
-- **Deep Codebase Context**: OpenCursor understands your whole project structure, not just the open file.
-- **Instant Edit (`Cmd+I`)**: Describe changes in natural language and watch the code update in real-time.
-- **Smart Chat (`Cmd+L`)**: A dedicated AI sidekick that knows your libraries, terminal history, and open files.
-- **Parity with the Best**: We are racing toward feature parity with Cursor, Windsurf, and Antigravity. See our [9,000 Feature Masterlist](./FEATURE_MASTERLIST_9000.md).
+**Quick build:**
+```bash
+git clone https://github.com/riftsh/Opencursor.git
+cd Opencursor
+git submodule update --init --recursive
+npm install
+npm run compile-fast
+./scripts/code.sh
+```
 
----
+**Production build:**
+```bash
+npm run compile
+npm run compile-build
+```
 
-## 🏗️ Project Structure
+See [BUILD.md](./BUILD.md) for detailed build instructions and troubleshooting.
 
-OpenCursor is composed of two main parts:
-1.  **OpenCursor-Main (This Repo)**: Our custom fork of the VSCode editor shell.
-2.  **OpenCursor-Submodule**: The AI "brain" of the editor (Fork of Continue). Found at [github.com/riftsh/opencursor](https://github.com/riftsh/opencursor).
+## Features
 
----
+- `Cmd+L` / `Ctrl+L` - Open AI chat
+- `Cmd+I` / `Ctrl+I` - Inline code editing
+- Deep codebase understanding
+- Tab autocomplete
+- Terminal integration
 
-## 🛠️ Stack & Technologies
+## Project Structure
 
-OpenCursor is built with performance and extensibility in mind:
-- **Editor Core**: TypeScript / Electron.js
-- **AI Engine**: Advanced agentic core with support for 30+ LLM providers.
-- **Local AI**: Optimized integration for Ollama and local GPU compute.
+This repo (`Open-cursor-main`) is the VS Code editor shell. The AI functionality is in the `opencursor-submodule-beta` directory (forked from Continue.dev).
 
----
+## Install Extensions
 
-## 🤝 Contributing & Community
+OpenCursor supports most VS Code extensions. Open the extensions panel (`Cmd+Shift+X`) and search. Note: Some Microsoft proprietary extensions won't work - use alternatives from [Open VSX](https://open-vsx.org/).
 
-Join us in building the world's most transparent AI editor.
-- **Discord**: [Join the OpenCursor Community](https://discord.gg/7QMraJUsQt)
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/riftsh/Opencursor/issues)
+## Contributing
 
----
-[Apache 2.0 License](./LICENSE) © 2024 OpenCursor
+Maintainer: **Devflex-ai**
+
+- Issues: https://github.com/riftsh/Opencursor/issues
+- Discussions: https://github.com/riftsh/Opencursor/discussions
+
+Contributions welcome. See BUILD.md for setup.
+
+## License
+
+Apache 2.0

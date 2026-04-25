@@ -77,7 +77,7 @@ export class NativeDialogHandler extends AbstractDialogHandler {
 		const detailString = (useAgo: boolean): string => {
 			return localize({ key: 'aboutDetail', comment: ['Electron, Chromium, Node.js and V8 are product names that need no translation'] },
 				"Version: {0}\nCommit: {1}\nDate: {2}\n\nVSCode Version: {3}\nVSCode Commit: {4}\nElectron: {5}\nElectronBuildId: {6}\nChromium: {7}\nNode.js: {8}\nV8: {9}\nOS: {10}",
-				this.productService.pearAIVersion || 'Unknown',
+				this.productService.OpencursorVersion || 'Unknown',
 				this.productService.commit || 'Unknown',
 				this.productService.date ? `${this.productService.date}${useAgo ? ' (' + fromNow(new Date(this.productService.date), true) + ')' : ''}` : 'Unknown',
 				vscodeVersion,

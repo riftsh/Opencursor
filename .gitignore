@@ -21,8 +21,10 @@ vscode.db
 product.overrides.json
 *.snap.actual
 .vscode-test
-extensions/pearai-submodule
-extensions/pearai-ref
+extensions/Opencursor-submodule
+extensions/Opencursor-ref
 .prompts
 .aider*
 .env
+extensions/opencursor.vsix
+*.vsix

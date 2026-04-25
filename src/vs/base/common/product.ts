@@ -50,11 +50,11 @@ export type ExtensionVirtualWorkspaceSupport = {
 };
 
 export interface IProductConfiguration {
-	readonly pearAIVersion?: string;
+	readonly OpencursorVersion?: string;
 	readonly version: string; // vscode version
 	readonly date?: string;
 	readonly quality?: string;
-	readonly commit?: string; // pearAI commit, generated when building and packaging
+	readonly commit?: string; // Opencursor commit, generated when building and packaging
 	readonly VSCodeCommit?: string;
 
 	readonly nameShort: string;
@@ -149,8 +149,8 @@ export interface IProductConfiguration {
 	readonly licenseUrl?: string;
 	readonly serverLicenseUrl?: string;
 	readonly privacyStatementUrl?: string;
-	readonly pearAIHomepageURL?: string;
-	readonly pearAILinks?: {
+	readonly OpencursorHomepageURL?: string;
+	readonly OpencursorLinks?: {
 		homepage: string;
 		dashboard: string;
 		faq: string;

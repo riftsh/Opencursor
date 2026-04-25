@@ -1,12 +1,12 @@
-import * as Vinyl from 'vinyl';
-import * as through from 'through';
+import Vinyl from 'vinyl';
+import through from 'through';
 import * as builder from './builder';
 import * as ts from 'typescript';
 import { Readable, Writable, Duplex } from 'stream';
 import { dirname } from 'path';
 import { strings } from './utils';
 import { readFileSync, statSync } from 'fs';
-import * as log from 'fancy-log';
+import log from 'fancy-log';
 import { ESBuildTranspiler, ITranspiler, TscTranspiler } from './transpiler';
 import colors = require('ansi-colors');
 

@@ -1,7 +1,7 @@
-import * as es from 'event-stream';
-import * as fancyLog from 'fancy-log';
-import * as ansiColors from 'ansi-colors';
-import * as File from 'vinyl';
+import es from 'event-stream';
+import fancyLog from 'fancy-log';
+import ansiColors from 'ansi-colors';
+import File from 'vinyl';
 
 class Entry {
 	constructor(readonly name: string, public totalCount: number, public totalSize: number) { }

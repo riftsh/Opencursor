@@ -73,25 +73,25 @@ const FILE_ALLOWLIST = new Set([
 ]);
 
 const REPLACERS = [
-	// ── Identifier-safe patterns (compound identifiers like PearAIView → OpenCursorView) ──
+	// ── Identifier-safe patterns (compound identifiers like OpencursorView → OpenCursorView) ──
 
-	// PascalCase compound: PearAIView → OpenCursorView, PearAIChatExtensionId → OpenCursorChatExtensionId
-	{ pattern: /PearAI(?=[A-Z])/g, replace: 'OpenCursor' },
-	// PascalCase standalone: PearAI at end of token or before non-alpha
-	{ pattern: /\bPearAI\b/g, replace: 'OpenCursor' },
+	// PascalCase compound: OpencursorView → OpenCursorView, OpencursorChatExtensionId → OpenCursorChatExtensionId
+	{ pattern: /Opencursor(?=[A-Z])/g, replace: 'OpenCursor' },
+	// PascalCase standalone: Opencursor at end of token or before non-alpha
+	{ pattern: /\bOpencursor\b/g, replace: 'OpenCursor' },
 
 	// camelCase compound: pearOverlay → opencursorOverlay
 	{ pattern: /\bpearOverlay/g, replace: 'opencursorOverlay' },
 	{ pattern: /\bPearOverlay/g, replace: 'OpenCursorOverlay' },
 
-	// SCREAMING_CASE: PEAROVERLAY → OPENCURSOR_OVERLAY, PEARAI → OPENCURSOR
+	// SCREAMING_CASE: PEAROVERLAY → OPENCURSOR_OVERLAY, Opencursor → OPENCURSOR
 	{ pattern: /PEAROVERLAY/g, replace: 'OPENCURSOR_OVERLAY' },
-	{ pattern: /PEARAI/g, replace: 'OPENCURSOR' },
+	{ pattern: /Opencursor/g, replace: 'OPENCURSOR' },
 
-	// lowercase compound identifiers: pearaiChat → opencursorChat, pearaiViews → opencursorViews
-	{ pattern: /pearai(?=[A-Z])/g, replace: 'opencursor' },
-	// lowercase standalone/kebab: pearai → opencursor
-	{ pattern: /\bpearai\b/g, replace: 'opencursor' },
+	// lowercase compound identifiers: OpencursorChat → opencursorChat, OpencursorViews → opencursorViews
+	{ pattern: /Opencursor(?=[A-Z])/g, replace: 'opencursor' },
+	// lowercase standalone/kebab: Opencursor → opencursor
+	{ pattern: /\bOpencursor\b/g, replace: 'opencursor' },
 	{ pattern: /\bpear-ai\b/g, replace: 'opencursor' },
 
 	// Display name variants
@@ -101,7 +101,7 @@ const REPLACERS = [
 	{ pattern: /pearoverlay/g, replace: 'opencursor-overlay' },
 
 	// FIRST_LAUNCH keys
-	{ pattern: /PEARAI_FIRST_LAUNCH_KEY/g, replace: 'OPENCURSOR_FIRST_LAUNCH_KEY' },
+	{ pattern: /Opencursor_FIRST_LAUNCH_KEY/g, replace: 'OPENCURSOR_FIRST_LAUNCH_KEY' },
 
 	// ── Brand URLs ──
 	{ pattern: /https:\/\/riftsh\.ai\/?/g, replace: 'github.com/riftsh/opencursor' },

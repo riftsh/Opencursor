@@ -297,10 +297,10 @@ class OpenOpenCursorDocsAction extends Action2 {
 	override async run(accessor: ServicesAccessor): Promise<void> {
 		const openerService = accessor.get(IOpenerService);
 		const productService = accessor.get(IProductService);
-		if (!productService.pearAILinks?.docs) {
+		if (!productService.OpencursorLinks?.docs) {
 			return;
 		}
-		await openerService.open(URI.parse(productService.pearAILinks?.docs));
+		await openerService.open(URI.parse(productService.OpencursorLinks?.docs));
 	}
 }
 

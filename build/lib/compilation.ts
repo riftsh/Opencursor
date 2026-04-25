@@ -1,15 +1,15 @@
-import * as es from 'event-stream';
+import es from 'event-stream';
 import * as fs from 'fs';
-import * as gulp from 'gulp';
+import gulp from 'gulp';
 import * as path from 'path';
 import * as monacodts from './monaco-api';
 import * as nls from './nls';
 import { createReporter } from './reporter';
 import * as util from './util';
-import * as fancyLog from 'fancy-log';
-import * as ansiColors from 'ansi-colors';
+import fancyLog from 'fancy-log';
+import ansiColors from 'ansi-colors';
 import * as os from 'os';
-import * as File from 'vinyl';
+import File from 'vinyl';
 import * as task from './task';
 import { Mangler } from './mangle/index';
 import { RawSourceMap } from 'source-map';
@@ -42,9 +42,10 @@ interface ICompileTaskOptions {
 	readonly emitError: boolean;
 	readonly transpileOnly: boolean | { esbuild: boolean };
 	readonly preserveEnglish: boolean;
+	readonly skipMangler?: boolean;
 }
 
-function createCompile(src: string, { build, emitError, transpileOnly, preserveEnglish }: ICompileTaskOptions) {
+function createCompile(src: string, { build, emitError, transpileOnly, preserveEnglish, skipMangler }: ICompileTaskOptions) {
 	const tsb = require('./tsb') as typeof import('./tsb');
 	const sourcemaps = require('gulp-sourcemaps') as typeof import('gulp-sourcemaps');
 
@@ -81,7 +82,7 @@ function createCompile(src: string, { build, emitError, transpileOnly, preserveE
 			.pipe(util.loadSourcemaps())
 			.pipe(compilation(token))
 			.pipe(noDeclarationsFilter)
-			.pipe(util.$if(build, nls.nls({ preserveEnglish })))
+			.pipe(util.$if(build && !skipMangler, nls.nls({ preserveEnglish })))
 			.pipe(noDeclarationsFilter.restore)
 			.pipe(util.$if(!transpileOnly, sourcemaps.write('.', {
 				addComment: false,
@@ -124,7 +125,25 @@ export function compileTask(src: string, out: string, build: boolean, options: {
 			throw new Error('compilation requires 4GB of RAM');
 		}
 
-		const compile = createCompile(src, { build, emitError: true, transpileOnly: false, preserveEnglish: !!options.preserveEnglish });
+		const useEsbuild = process.env.TRANSPILE_ONLY === 'esbuild';
+		const skipMangler = process.env.FAST_BUILD === 'true';
+		console.log(`[DEBUG] FAST_BUILD=${process.env.FAST_BUILD}, skipMangler=${skipMangler}, build=${build}`);
+
+		// For fast build, use transpile-only mode (no type checking, no mangling)
+		if (skipMangler && build) {
+			fancyLog(ansiColors.yellow('[fast-build]'), 'Using transpile-only mode for faster compilation');
+			const transpile = createCompile(src, { build: true, emitError: true, transpileOnly: true, preserveEnglish: false, skipMangler: true });
+			const srcPipe = gulp.src(`${src}/**`, { base: `${src}` });
+			return new Promise((resolve, reject) => {
+				srcPipe
+					.pipe(transpile())
+					.pipe(gulp.dest(out))
+					.on('end', resolve)
+					.on('error', reject);
+			});
+		}
+
+		const compile = createCompile(src, { build, emitError: true, transpileOnly: useEsbuild ? { esbuild: true } : false, preserveEnglish: !!options.preserveEnglish, skipMangler });
 		const srcPipe = gulp.src(`${src}/**`, { base: `${src}` });
 		const generator = new MonacoGenerator(false);
 		if (src === 'src') {
@@ -133,7 +152,7 @@ export function compileTask(src: string, out: string, build: boolean, options: {
 
 		// mangle: TypeScript to TypeScript
 		let mangleStream = es.through();
-		if (build && !options.disableMangle) {
+		if (build && !options.disableMangle && !skipMangler) {
 			let ts2tsMangler = new Mangler(compile.projectPath, (...data) => fancyLog(ansiColors.blue('[mangler]'), ...data), { mangleExports: true, manglePrivateFields: true });
 			const newContentsByFileName = ts2tsMangler.computeNewFileContents(new Set(['saveState']));
 			mangleStream = es.through(async function write(data: File & { sourceMap?: RawSourceMap }) {

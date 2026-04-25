@@ -1,7 +1,7 @@
-import * as esbuild from 'esbuild';
+import esbuild from 'esbuild';
 import * as ts from 'typescript';
 import * as threads from 'node:worker_threads';
-import * as Vinyl from 'vinyl';
+import Vinyl from 'vinyl';
 import { cpus } from 'node:os';
 
 interface TranspileReq {

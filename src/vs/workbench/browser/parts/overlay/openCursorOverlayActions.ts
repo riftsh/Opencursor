@@ -17,7 +17,7 @@ import { ICommandService } from "../../../../platform/commands/common/commands.j
 // import { OpenCursorVisibleContext } from "../../../common/contextkeys.js";
 
 export class ClosePearOverlayAction extends Action2 {
-	static readonly ID = "workbench.action.closePearAI";
+	static readonly ID = "workbench.action.closeOpencursor";
 
 	constructor() {
 		super({
@@ -39,7 +39,7 @@ export class ClosePearOverlayAction extends Action2 {
 }
 
 export class TogglePearOverlayAction extends Action2 {
-	static readonly ID = "workbench.action.togglePearAI";
+	static readonly ID = "workbench.action.toggleOpencursor";
 
 	constructor() {
 		super({

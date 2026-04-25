@@ -257,8 +257,8 @@ This will generate the new OpenCursor app and takes around 1 hour.
 2. Delete any existing `opencursor-submodule` folder in the `extensions/` folder of the packaged OpenCursor app.
 3. Double-click your overall OpenCursor app, and the extension should be built-in.
  - On MacOS for example (Using VScode for .vsix installation)
-   1. `cp -r ~/.vscode/extensions/opencursor.opencursor-{OPENCURSOR_VERSION} {PATH_TO_PearAI.app}/Contents/Resources/app/extension`
-   2. `rm -rf {PATH_TO_PearAI.app}/Contents/Resources/app/extensions/opencursor-submodule `
+   1. `cp -r ~/.vscode/extensions/opencursor.opencursor-{OPENCURSOR_VERSION} {PATH_TO_Opencursor.app}/Contents/Resources/app/extension`
+   2. `rm -rf {PATH_TO_Opencursor.app}/Contents/Resources/app/extensions/opencursor-submodule `
    3. Double-click your overall OpenCursor app, and the extension should be built-in.
 
 

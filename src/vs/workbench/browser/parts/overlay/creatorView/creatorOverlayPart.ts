@@ -933,10 +933,10 @@ export class CreatorOverlayPart extends Part {
 		);
 
 		await new Promise<void>((resolve) => {
-			// Set a single timeout for animation completion
+			// Set a single timeout for animation completion - extended to 10 seconds for import time
 			setTimeout(() => {
 				resolve();
-			}, 500); // Match the transition duration
+			}, 10000); // 10 seconds to allow extension imports
 		});
 
 		// Hiding the overlay container after we've done all the animations

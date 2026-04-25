@@ -1,5 +1,5 @@
-import * as fancyLog from 'fancy-log';
-import * as ansiColors from 'ansi-colors';
+import fancyLog from 'fancy-log';
+import ansiColors from 'ansi-colors';
 
 export interface BaseTask {
 	displayName?: string;

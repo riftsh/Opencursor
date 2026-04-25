@@ -112,10 +112,7 @@ interface IInventoryIcon {
 
 class InventoryIcons {
 	private static readonly icons: readonly IInventoryIcon[] = [
-		{ id: 'agent', icon: 'inventory-creator-icon', label: 'Agent', command: 'opencursor-roo-cline.SidebarProvider.focus', width: 80, containerId: 'opencursor-roo-cline' },
-		{ id: 'chat', icon: 'inventory-chat-icon', label: 'Chat', command: 'opencursor.chatView.focus', width: 10, containerId: 'opencursorchat' },
-		{ id: 'search', icon: 'inventory-search-icon', label: 'Search', command: 'opencursor.searchView.focus', width: 75, containerId: 'opencursorsearch' },
-		{ id: 'memory', icon: 'inventory-memory-icon', label: 'Memory', command: 'opencursor.mem0View.focus', width: 85, containerId: 'opencursormemory' }
+		{ id: 'search', icon: 'inventory-search-icon', label: 'Search', command: 'opencursor.searchView.focus', width: 75, containerId: 'opencursorsearch' }
 	] as const;
 
 	static getAll(): readonly IInventoryIcon[] {

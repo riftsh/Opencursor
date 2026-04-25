@@ -20,7 +20,7 @@ abstract class CheckoutCommandItem implements QuickPickItem {
 	get description(): string { return ''; }
 	get alwaysShow(): boolean { return true; }
 }
-
+ 
 class CreateBranchItem extends CheckoutCommandItem {
 	get label(): string { return l10n.t('{0} Create new branch...', '$(plus)'); }
 }

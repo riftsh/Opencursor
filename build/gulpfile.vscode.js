@@ -513,6 +513,12 @@ BUILD_TARGETS.forEach(buildTarget => {
 	}
 });
 
+// Fast packaging task that ONLY packages, no compilation at all
+gulp.task(task.define('vscode-darwin-fast', task.series(
+	util.rimraf(path.join(path.dirname(root), `VSCode-darwin-${process.arch === 'arm64' ? 'arm64' : 'x64'}`)),
+	packageTask('darwin', process.arch === 'arm64' ? 'arm64' : 'x64', 'out-vscode', `VSCode-darwin-${process.arch === 'arm64' ? 'arm64' : 'x64'}`, {})
+)));
+
 // #region nls
 
 const innoSetupConfig = {

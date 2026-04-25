@@ -11,12 +11,14 @@ const compilation = require('./lib/compilation');
  * @param {boolean} disableMangle
  */
 function makeCompileBuildTask(disableMangle) {
-	return task.series(
+	const compileTask = compilation.compileTask('src', 'out-build', true, { disableMangle });
+	const seriesTask = task.series(
 		util.rimraf('out-build'),
 		date.writeISODate('out-build'),
 		compilation.compileApiProposalNamesTask,
-		compilation.compileTask('src', 'out-build', true, { disableMangle })
+		compileTask
 	);
+	return (done) => seriesTask().then(() => done(), done);
 }
 
 // Full compile, including nls and inline sources in sourcemaps, mangling, minification, for build

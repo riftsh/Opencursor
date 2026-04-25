@@ -15,9 +15,9 @@
     "themes": [
       {
         "id": "Default OpenCursor Dark",
-        "label": "%pearAIDarkThemeLabel%",
+        "label": "%OpencursorDarkThemeLabel%",
         "uiTheme": "vs-dark",
-        "path": "./themes/pearai_dark.json"
+        "path": "./themes/Opencursor_dark.json"
       },
       {
         "id": "Default Dark+",
@@ -33,9 +33,9 @@
       },
       {
         "id": "Default OpenCursor Light",
-        "label": "%pearAILightThemeLabel%",
+        "label": "%OpencursorLightThemeLabel%",
         "uiTheme": "vs",
-        "path": "./themes/pearai_light.json"
+        "path": "./themes/Opencursor_light.json"
       },
       {
         "id": "Default Light+",

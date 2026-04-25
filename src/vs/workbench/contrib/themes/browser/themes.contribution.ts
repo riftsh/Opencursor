@@ -626,10 +626,10 @@ function toEntry(theme: IWorkbenchTheme): ThemeItem {
 	return item;
 }
 
-function toEntries(themes: Array<IWorkbenchTheme>, category?: string, showOnlyPearAI: boolean = true): QuickPickInput<ThemeItem>[] {
+function toEntries(themes: Array<IWorkbenchTheme>, category?: string, showOnlyOpencursor: boolean = true): QuickPickInput<ThemeItem>[] {
 	const sorter = (t1: ThemeItem, t2: ThemeItem) => t1.label.localeCompare(t2.label);
 
-	if (!showOnlyPearAI) {
+	if (!showOnlyOpencursor) {
 		const entries: QuickPickInput<ThemeItem>[] = themes.map(toEntry).sort(sorter);
 		if (entries.length > 0 && category) {
 			entries.unshift({ type: 'separator', label: category });
@@ -638,14 +638,14 @@ function toEntries(themes: Array<IWorkbenchTheme>, category?: string, showOnlyPe
 	}
 
 	// OpenCursor filtering logic
-	const pearAIThemes = themes.filter(t => t.label.includes('OpenCursor'));
+	const OpencursorThemes = themes.filter(t => t.label.includes('OpenCursor'));
 	const otherThemes = themes.filter(t => !t.label.includes('OpenCursor'));
 
 	const entries: QuickPickInput<ThemeItem>[] = [];
 
-	if (pearAIThemes.length > 0) {
+	if (OpencursorThemes.length > 0) {
 		entries.push({ type: 'separator', label: category ? category : 'OpenCursor Themes' });
-		entries.push(...pearAIThemes.map(toEntry).sort(sorter));
+		entries.push(...OpencursorThemes.map(toEntry).sort(sorter));
 	}
 
 	if (otherThemes.length > 0) {

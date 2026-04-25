@@ -10,7 +10,7 @@ import { IRequestService } from '../../request/common/request.js';
 import { AvailableForDownload, DisablementReason, IUpdateService, State, StateType, UpdateType } from '../common/update.js';
 
 export function createUpdateURL(platform: string, quality: string, productService: IProductService): string {
-	let updateURL = `${productService.updateUrl}/update/${platform}/${quality}/${productService.pearAIVersion}`;
+	let updateURL = `${productService.updateUrl}/update/${platform}/${quality}/${productService.OpencursorVersion}`;
 	return updateURL;
 }
 
@@ -76,7 +76,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 			return;
 		}
 
-		if (!this.productService.updateUrl || !this.productService.pearAIVersion) {
+		if (!this.productService.updateUrl || !this.productService.OpencursorVersion) {
 			this.setState(State.Disabled(DisablementReason.MissingConfiguration));
 			this.logService.info('update#ctor - updates are disabled as there is no update URL');
 			return;

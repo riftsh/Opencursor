@@ -29,9 +29,9 @@ interface WatermarkEntry {
 		web?: ContextKeyExpression;
 	};}
 
-const openOpenCursorChat: WatermarkEntry = { text: localize('watermark.openOpenCursorChat', "Open Chat"), id: 'opencursor.focusContinueInput', when: { native: ContextKeyExpr.has('pearAIExtensionLoaded') } };
-const bigChat: WatermarkEntry = { text: localize('watermark.pearAIBigChat', "Big Chat"), id: 'opencursor.resizeAuxiliaryBarWidth', when: { native: ContextKeyExpr.has('pearAIExtensionLoaded') } };
-const prevChat: WatermarkEntry = { text: localize('watermark.pearAIPrevChat', "Previous Chat"), id: 'opencursor.loadRecentChat', when: { native: ContextKeyExpr.has('pearAIExtensionLoaded') } };
+const openOpenCursorChat: WatermarkEntry = { text: localize('watermark.openOpenCursorChat', "Open Chat"), id: 'opencursor.focusContinueInput', when: { native: ContextKeyExpr.has('OpencursorExtensionLoaded') } };
+const bigChat: WatermarkEntry = { text: localize('watermark.OpencursorBigChat', "Big Chat"), id: 'opencursor.resizeAuxiliaryBarWidth', when: { native: ContextKeyExpr.has('OpencursorExtensionLoaded') } };
+const prevChat: WatermarkEntry = { text: localize('watermark.OpencursorPrevChat', "Previous Chat"), id: 'opencursor.loadRecentChat', when: { native: ContextKeyExpr.has('OpencursorExtensionLoaded') } };
 const showCommands: WatermarkEntry = { text: localize('watermark.showCommands', "Show All Commands"), id: 'workbench.action.showCommands' };
 const gotoFile: WatermarkEntry = { text: localize('watermark.quickAccess', "Go to File"), id: 'workbench.action.quickOpen' };
 const openFile: WatermarkEntry = { text: localize('watermark.openFile', "Open File"), id: 'workbench.action.files.openFile' };
@@ -151,7 +151,7 @@ export class EditorGroupWatermark extends Disposable {
 		// Wait for the all extensions to be activated
 		await this.extensionService.activateByEvent('onStartupFinished');
 		// TODO: @Himanshu-Singh-Chauhan - this should be set from inside the extension, test it later, if it works, remove this
-		this.contextKeyService.createKey('pearAIExtensionLoaded', true); // Set a context key when the OpenCursor extension is loaded
+		this.contextKeyService.createKey('OpencursorExtensionLoaded', true); // Set a context key when the OpenCursor extension is loaded
 
 		this.enabled = this.configurationService.getValue<boolean>('workbench.tips.enabled');
 

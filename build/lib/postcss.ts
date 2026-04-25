@@ -1,6 +1,6 @@
-import * as postcss from 'postcss';
-import * as File from 'vinyl';
-import * as es from 'event-stream';
+import postcss from 'postcss';
+import File from 'vinyl';
+import es from 'event-stream';
 
 export function gulpPostcss(plugins: postcss.AcceptedPlugin[], handleError?: (err: Error) => void) {
 	const instance = postcss(plugins);
