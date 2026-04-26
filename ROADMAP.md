@@ -149,7 +149,7 @@ OpenCursor is in early development. We're stabilizing the VS Code fork and integ
 
 | Version | Focus | ETA |
 |---------|-------|-----|
-| v1.0.0 | VS Code fork foundation | Done |
+| v1.0.0 | VS Code fork foundation (merged, features pending) | Foundation |
 | v1.0.1 | **Current: Bug fixes + Core features** | Q2 2026 |
 | v1.0.2 | Editor enhancements | Q3 2026 |
 | v1.0.3 | UI/UX polish | Q4 2026 |

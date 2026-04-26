@@ -1,8 +1,4 @@
-[submodule "extensions/Opencursor-submodule"]
-	path = extensions/Opencursor-submodule
-	url = https://github.com/riftsh/Opencursor-submodule.git
+[submodule "extensions/opencursor-submodule"]
+	path = extensions/opencursor-submodule
+	url = https://github.com/riftsh/opencursor-submodule.git
 	branch = main
-[submodule "extensions/Opencursor-Roo-Code"]
-	path = extensions/Opencursor-Roo-Code
-	url = https://github.com/riftsh/Opencursor-Roo-Code
-        branch = main

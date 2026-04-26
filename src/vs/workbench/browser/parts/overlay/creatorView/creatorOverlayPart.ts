@@ -25,6 +25,7 @@ import { ExtensionIdentifier } from "../../../../../platform/extensions/common/e
 import { IEditorGroupsService } from "../../../../../workbench/services/editor/common/editorGroupsService.js";
 import { Emitter } from "../../../../../base/common/event.js";
 import { CommandEmitter } from "../../../../../platform/commands/browser/commandEmitter.js";
+import { INotificationService } from "../../../../../platform/notification/common/notification.js";
 
 const CREATOR_VIEW_ID = "opencursor.creatorView";
 const CREATOR_OVERLAY_TITLE = "opencursor.creatorOverlayView";
@@ -191,6 +192,8 @@ export class CreatorOverlayPart extends Part {
 		private readonly _instantiationService: IInstantiationService,
 		@IEditorGroupsService
 		private readonly _editorGroupsService: IEditorGroupsService,
+		@INotificationService
+		private readonly _notificationService: INotificationService,
 	) {
 		super(
 			CreatorOverlayPart.ID,
@@ -241,12 +244,12 @@ export class CreatorOverlayPart extends Part {
 	 * This can be called to get a clean slate
 	 */
 	private resetState(): void {
-		// Reset all state variables
+		// Reset all state variables, preserving _webviewEnabled to retain failure state
 		this.state = "loading";
 		this._isLocked = false;
 		this.initializedWebview = false;
 		this.needsReinit = false;
-		this._webviewEnabled = true;
+		// Note: _webviewEnabled is intentionally NOT reset here to preserve initialization failure state
 		this.openInProgress = false;
 		this.initializingPromise = null;
 
@@ -422,8 +425,14 @@ export class CreatorOverlayPart extends Part {
 				console.log("WEBVIEW CreatorOverlayPart SERVICE RESOLVED!");
 			} catch (error) {
 				console.error("Failed to resolve creator view:", error);
-				// Mark as initialized but disable webview functionality
+				// Disable webview and clean up partial initialization
 				this._webviewEnabled = false;
+				// Clean up orphaned webview element
+				if (this.webviewElement) {
+					this.webviewElement.dispose?.();
+					this.webviewElement = undefined;
+				}
+				this.webviewView = undefined;
 			} finally {
 				// Always mark as initialized when we're done trying
 				this.initializedWebview = true;
@@ -511,6 +520,14 @@ export class CreatorOverlayPart extends Part {
 				// Otherwise just make sure initialization is complete
 				await this.initialize();
 				await this.initializeWebview();
+			}
+
+			// Re-check after initialization - if webview failed to initialize, abort
+			if (!this._webviewEnabled || !this.webviewElement) {
+				console.error("Webview initialization failed - cannot open creator overlay");
+				this._notificationService.error("Creator overlay could not be opened. The webview extension may not be available.");
+				this.openInProgress = false;
+				return;
 			}
 
 			if (!this.webviewElement) {
@@ -720,7 +737,7 @@ export class CreatorOverlayPart extends Part {
 
 		if (!this._webviewEnabled) {
 			console.warn("Creator overlay webview not available - extension may not be built");
-			// Could show notification here
+			this._notificationService.warn("Creator overlay webview not available. The extension may not be built properly.");
 			return;
 		}
 

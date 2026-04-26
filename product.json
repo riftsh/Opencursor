@@ -36,14 +36,14 @@
 	"quality": "stable",
 	"webviewContentExternalBaseUrlTemplate": "https://{{uuid}}.vscode-cdn.net/insider/ef65ac1ba57f57f2a3961bfe94aa20481caca4c6/out/vs/workbench/contrib/webview/browser/pre/",
 	"extensionsGallery": {
-		"nlsBaseUrl": "https://www.vscode-unpkg.net/_lp/",
+		"nlsBaseUrl": "",
 		"serviceUrl": "https://open-vsx.org/vscode/gallery",
 		"itemUrl": "https://open-vsx.org/vscode/item",
-		"publisherUrl": "https://open-vsx.org/vscode/publisher",
+		"publisherUrl": "https://open-vsx.org/namespace",
 		"resourceUrlTemplate": "https://open-vsx.org/vscode/unpkg/{publisher}/{name}/{version}/{path}",
-		"controlUrl": "https://az764295.vo.msecnd.net/extensions/marketplace.json"
+		"controlUrl": ""
 	},
-	"profileTemplatesUrl": "https://az764295.vo.msecnd.net/profile-templates/profile-templates.json",
+	"profileTemplatesUrl": "",
 	"extensionRecommendations": {
 		"ms-dotnettools.csdevkit": {
 			"onFileOpen": [
