@@ -422,7 +422,8 @@ export class CreatorOverlayPart extends Part {
 				console.log("WEBVIEW CreatorOverlayPart SERVICE RESOLVED!");
 			} catch (error) {
 				console.error("Failed to resolve creator view:", error);
-				// Continue despite error - we'll still mark as initialized
+				// Mark as initialized but disable webview functionality
+				this._webviewEnabled = false;
 			} finally {
 				// Always mark as initialized when we're done trying
 				this.initializedWebview = true;
@@ -716,6 +717,12 @@ export class CreatorOverlayPart extends Part {
 
 	show(): void {
 		console.log("CREATOR OVERLAY: show() called");
+
+		if (!this._webviewEnabled) {
+			console.warn("Creator overlay webview not available - extension may not be built");
+			// Could show notification here
+			return;
+		}
 
 		// Prevent calling open() if we're already open to avoid duplicate animations
 		if (this.state !== "open") {
