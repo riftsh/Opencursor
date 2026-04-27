@@ -1,7 +1,7 @@
 # OpenCursor
 
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Top contributors
-[![Top contributors](https://images.repography.com/127308565/riftsh/Opencursor/top-contributors/CkfvCn0pURm9p51o1mdRv7kBzuoGRJCaaRc_OGuVctA/UcQsmb9RYSGB32vlYLfqJPaJAH7cehqh27kaXVZMnGE_table.svg)](https://github.com/riftsh/Opencursor/graphs/contributors)
+[![Top contributors](https://images.repography.com/127308565/riftsh/Opencursor/top-contributors/CkfvCn0pURm9p51o1mdRv7kBzuoGRJCaaRc_OGuVctA/UcQsmb9RYSGB32vlYLfqJPaJAH7cehqh27kaXVZMnGE_table.svg)](https://github.com/riftsh/Opencursor/graphs/contributors)  
 
 
 > **🚧 Pre-1.0 — APIs and UX are unstable**
