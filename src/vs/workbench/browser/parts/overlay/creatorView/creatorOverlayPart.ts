@@ -529,7 +529,7 @@ export class CreatorOverlayPart extends Part {
 			}
 
 			// Re-check after initialization - if webview failed to initialize, abort
-			if (!this._webviewEnabled) {
+			if (!this._webviewEnabled || !this.webviewElement) {
 				console.error("Webview initialization failed - cannot open creator overlay");
 				if (!this._webviewFailureNotified) {
 					this._notificationService.error("Creator overlay could not be opened. The webview extension may not be available.");
