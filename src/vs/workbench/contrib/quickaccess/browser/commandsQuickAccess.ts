@@ -258,7 +258,7 @@ export class ShowAllCommandsAction extends Action2 {
 	constructor() {
 		super({
 			id: ShowAllCommandsAction.ID,
-			title: localize2('showTriggerActions', 'Show All Commands'),
+			title: localize2('showTriggerActions', 'Command Palette'),
 			keybinding: {
 				weight: KeybindingWeight.WorkbenchContrib,
 				when: undefined,

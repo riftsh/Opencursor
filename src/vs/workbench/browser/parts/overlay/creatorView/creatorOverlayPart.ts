@@ -25,6 +25,7 @@ import { ExtensionIdentifier } from "../../../../../platform/extensions/common/e
 import { IEditorGroupsService } from "../../../../../workbench/services/editor/common/editorGroupsService.js";
 import { Emitter } from "../../../../../base/common/event.js";
 import { CommandEmitter } from "../../../../../platform/commands/browser/commandEmitter.js";
+import { INotificationService } from "../../../../../platform/notification/common/notification.js";
 
 const CREATOR_VIEW_ID = "opencursor.creatorView";
 const CREATOR_OVERLAY_TITLE = "opencursor.creatorOverlayView";
@@ -181,6 +182,9 @@ export class CreatorOverlayPart extends Part {
 	// Flag to enable/disable webview functionality
 	private _webviewEnabled: boolean = true;
 
+	// Track if webview failure notification was already shown
+	private _webviewFailureNotified: boolean = false;
+
 	constructor(
 		@IThemeService themeService: IThemeService,
 		@IStorageService storageService: IStorageService,
@@ -191,6 +195,8 @@ export class CreatorOverlayPart extends Part {
 		private readonly _instantiationService: IInstantiationService,
 		@IEditorGroupsService
 		private readonly _editorGroupsService: IEditorGroupsService,
+		@INotificationService
+		private readonly _notificationService: INotificationService,
 	) {
 		super(
 			CreatorOverlayPart.ID,
@@ -241,12 +247,12 @@ export class CreatorOverlayPart extends Part {
 	 * This can be called to get a clean slate
 	 */
 	private resetState(): void {
-		// Reset all state variables
+		// Reset all state variables, preserving _webviewEnabled to retain failure state
 		this.state = "loading";
 		this._isLocked = false;
 		this.initializedWebview = false;
 		this.needsReinit = false;
-		this._webviewEnabled = true;
+		// Note: _webviewEnabled is intentionally NOT reset here to preserve initialization failure state
 		this.openInProgress = false;
 		this.initializingPromise = null;
 
@@ -277,6 +283,9 @@ export class CreatorOverlayPart extends Part {
 	 */
 	public setWebviewEnabled(enabled: boolean): void {
 		this._webviewEnabled = enabled;
+		if (enabled) {
+			this._webviewFailureNotified = false;
+		}
 	}
 
 	/**
@@ -422,7 +431,14 @@ export class CreatorOverlayPart extends Part {
 				console.log("WEBVIEW CreatorOverlayPart SERVICE RESOLVED!");
 			} catch (error) {
 				console.error("Failed to resolve creator view:", error);
-				// Continue despite error - we'll still mark as initialized
+				// Disable webview and clean up partial initialization
+				this._webviewEnabled = false;
+				// Clean up orphaned webview element
+				if (this.webviewElement) {
+					this.webviewElement.dispose?.();
+					this.webviewElement = undefined;
+				}
+				this.webviewView = undefined;
 			} finally {
 				// Always mark as initialized when we're done trying
 				this.initializedWebview = true;
@@ -512,8 +528,15 @@ export class CreatorOverlayPart extends Part {
 				await this.initializeWebview();
 			}
 
-			if (!this.webviewElement) {
-				throw new Error("webviewElement is not initialized");
+			// Re-check after initialization - if webview failed to initialize, abort
+			if (!this._webviewEnabled || !this.webviewElement) {
+				console.error("Webview initialization failed - cannot open creator overlay");
+				if (!this._webviewFailureNotified) {
+					this._notificationService.error("Creator overlay could not be opened. The webview extension may not be available.");
+					this._webviewFailureNotified = true;
+				}
+				this.openInProgress = false;
+				return;
 			}
 
 			if (this.state === "open" || !this.overlayContainer) {
@@ -716,6 +739,15 @@ export class CreatorOverlayPart extends Part {
 
 	show(): void {
 		console.log("CREATOR OVERLAY: show() called");
+
+		if (!this._webviewEnabled) {
+			console.warn("Creator overlay webview not available - extension may not be built");
+			if (!this._webviewFailureNotified) {
+				this._notificationService.warn("Creator overlay webview not available. The extension may not be built properly.");
+				this._webviewFailureNotified = true;
+			}
+			return;
+		}
 
 		// Prevent calling open() if we're already open to avoid duplicate animations
 		if (this.state !== "open") {

@@ -1,206 +1,25 @@
 {
-  "name": "opencursor-ide",
-  "displayName": "🤖 OpenCursor IDE",
-  "description": "Advanced AI-powered IDE with 400+ provider integrations, multi-agent collaboration, and terminal command execution. The next generation of AI development environments.",
-  "version": "2.0.0",
-  "engines": {
-    "vscode": "^1.96.0"
-  },
-  "categories": [
-    "AI",
-    "Machine Learning",
-    "Snippets",
-    "Other",
-    "Programming Languages"
-  ],
-  "keywords": [
-    "ai",
-    "assistant",
-    "copilot",
-    "chat",
-    "code",
-    "multi-agent",
-    "terminal",
-    "400+ providers"
-  ],
-  "icon": "media/icon.png",
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "opencursor.openChat",
-        "title": "🤖 Open OpenCursor Chat",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.inlineChat",
-        "title": "💬 Start Inline Chat",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.executeTerminal",
-        "title": "💻 Execute Terminal Command",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.multiAgentSession",
-        "title": "🤖 Start Multi-Agent Session",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.explainCode",
-        "title": "🔍 Explain Code",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.refactorCode",
-        "title": "🔧 Refactor Code",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.debugCode",
-        "title": "🐛 Debug Code",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.generateTests",
-        "title": "🧪 Generate Tests",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.optimizeCode",
-        "title": "⚡ Optimize Code",
-        "category": "OpenCursor"
-      },
-      {
-        "command": "opencursor.generateDocs",
-        "title": "📝 Generate Documentation",
-        "category": "OpenCursor"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "opencursor.openChat",
-        "key": "cmd+shift+i",
-        "mac": "cmd+shift+i"
-      },
-      {
-        "command": "opencursor.inlineChat",
-        "key": "cmd+l",
-        "mac": "cmd+l"
-      },
-      {
-        "command": "opencursor.executeTerminal",
-        "key": "cmd+shift+t",
-        "mac": "cmd+shift+t"
-      }
-    ],
-    "views": {
-      "explorer": [
-        {
-          "id": "opencursorSearchView",
-          "name": "🔍 OpenCursor Search",
-          "when": "opencursor.searchVisible"
-        }
-      ]
-    },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "opencursor",
-          "title": "OpenCursor",
-          "icon": "media/icon.svg"
-        }
-      ]
-    },
-    "configuration": {
-      "title": "OpenCursor Agent",
-      "properties": {
-        "opencursor.provider": {
-          "type": "string",
-          "default": "claude-3.5-sonnet",
-          "description": "Default AI provider",
-          "enum": [
-            "claude-3.5-sonnet",
-            "claude-3-opus",
-            "gpt-4",
-            "gpt-4-turbo",
-            "gemini-pro",
-            "deepseek-coder",
-            "llama-3.1",
-            "codellama"
-          ]
-        },
-        "opencursor.enableMultiAgent": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable multi-agent collaboration"
-        },
-        "opencursor.terminalCommands": {
-          "type": "boolean",
-          "default": true,
-          "description": "Allow AI to execute terminal commands"
-        },
-        "opencursor.defaultSidebar": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show OpenCursor Agent as default sidebar"
-        },
-        "opencursor.autoSuggest": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable automatic code suggestions"
-        },
-        "opencursor.realTimeCollab": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable real-time collaboration features"
-        },
-        "opencursor.confidenceScores": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show confidence scores for AI responses"
-        },
-        "opencursor.customModel": {
-          "type": "boolean",
-          "default": true,
-          "description": "Use OpenCursor's custom trained model"
-        },
-        "opencursor.mcpSupport": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable MCP server integrations"
-        },
-        "opencursor.offlineMode": {
-          "type": "boolean",
-          "default": false,
-          "description": "Work completely offline with local models"
-        }
-      }
-    }
-  },
-  "activationEvents": [
-    "onStartupFinished"
-  ],
+  "name": "opencursor",
+  "version": "2.1.0",
+  "private": true,
+  "description": "OpenCursor - AI code assistant",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\" --ignore-path .gitignore --ignore-path .prettierignore",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\" --ignore-path .gitignore --ignore-path .prettierignore"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
-    "@types/node": "20.x",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5"
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^8",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "openai": "^4.20.0",
-    "socket.io-client": "^4.7.0"
+    "@ai-sdk/deepseek": "^2.0.20",
+    "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/openai": "^1.0.0",
+    "@ai-sdk/google": "^1.0.0",
+    "ollama-ai-provider": "^1.0.0"
   }
 }
