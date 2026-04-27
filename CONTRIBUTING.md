@@ -83,8 +83,6 @@ OpenCursor consists of several components:
 
 - **[opencursor-app](https://github.com/riftsh/opencursor-app)**: VSCode fork and parent repository for OpenCursor. Most contributions will NOT end up here.
 - **[./extensions/opencursor-submodule](github.com/riftsh/opencursor)**: Nearly all of OpenCursor's functionality, packaged as a built-in VSCode/OpenCursor extension. It is a fork of Continue, and is a git submodule of opencursor-app. **Most contributions will end up here!**
-- **[./extensions/OpenCursor-Roo-Code](https://github.com/riftsh/OpenCursor-Roo-Code)**: A Roo extension for OpenCursor.
-
 ## Setup Instructions
 
 ### 1. OpenCursor App (code.sh)
@@ -137,53 +135,6 @@ OpenCursor consists of several components:
    - Open the command palette (`Cmd/Ctrl+Shift+P`).
    - Select `Developer: Open Webview Developer Tools`.
 6. Make text changes to extensions to see them reflected in the OpenCursor sidebar.
-
-### 3. OpenCursor Roo Code
-
-#### A) Standalone Development
-
-1. Download esbuild problem matchers:
-   - Install from [OpenCursor Marketplace](https://market.riftsh.ai/items?itemName=connor4312.esbuild-problem-matchers).
-2. Install dependencies:
-   ```
-   npm run install:all
-   ```
-3. Watch the extension:
-   ```
-   npm run watch
-   ```
-4. Run dev on the extension:
-   ```
-   npm run dev
-   ```
-   This will start Vite with OpenCursor-Roo-Code on port 5174.
-5. Launch for debugging:
-   - Switch to Run and Debug view.
-   - Select `Extension (VS Code)` from the dropdown.
-   - Click the play button to launch.
-   - A new VSCode/OpenCursor window will open with your extension installed (with your local changes).
-   - The window title will display "Extension Development Host".
-6. View logs:
-   - Open the command palette (`Cmd/Ctrl+Shift+P`).
-   - Select `Developer: Open Webview Developer Tools`.
-7. Make text changes to see them reflected in the OpenCursor window.
-
-#### B) From opencursor-submodule (for changes to both components)
-
-If you want to develop both opencursor-submodule and OpenCursor-Roo-Code simultaneously:
-
-1. Update the paths in `opencursor-submodule/.vscode/launch.json` to point to the correct locations for OpenCursor Roo Code.
-2. Follow the steps to run Extension Development Host in OpenCursor submodule (Section 2 above).
-3. In OpenCursor-Roo-Code directory, run:
-   ```
-   npm run watch
-   ```
-4. In another terminal, run:
-   ```
-   npm run dev
-   ```
-   This will start OpenCursor-Roo-Code on port 5174, which the extension development host will connect to.
-5. Make text changes to see them reflected in the OpenCursor sidebar.
 
 ## 🪳 Debugging environment issues
 

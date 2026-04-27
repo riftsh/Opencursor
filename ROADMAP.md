@@ -22,7 +22,7 @@ OpenCursor is in early development. We're stabilizing the VS Code fork and integ
 1. AI chat panel fails to initialize on macOS intermittently (Critical)
 2. Memory leak in extension host with Ollama (Critical)
 3. Terminal integration breaks on workspace switch (Critical)
-4. API keys stored in plain text - implement encryption at rest (Critical)
+4. API keys stored in plain text - SECURITY BLOCKER: Do NOT store production BYOK keys in this build. Implement VS Code SecretStorage API (in-progress)
 5. Inline edits apply to wrong line range sometimes (Critical)
 6. Chat history doesn't persist between sessions (High)
 7. Multi-cursor editing broken with AI suggestions (High)

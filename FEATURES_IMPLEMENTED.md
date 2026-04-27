@@ -67,11 +67,11 @@ This document tracks the implementation status of the 300 features planned for O
 
 ### Core Editor (Implemented: 15)
 101. **Vim mode** - VimEngine.ts with full modal editing
-102. **Emacs mode** - Can be added via keybindings
+102. **Emacs mode** - (Planned) Not yet implemented
 103. **Sublime keybindings** - Supported through keymaps
 104. **VS Code keybindings** - Default supported
 105. **Custom keybinding editor** - Command palette integration
-106. **Keybinding conflict detector** - Can be added
+106. **Keybinding conflict detector** - (Planned) Not yet implemented
 107. **Command palette** - CommandPalette.ts implemented
 108. **Quick file open** - Quick open via UI extension
 109. **Recent files** - ProjectManager recent files
@@ -88,9 +88,9 @@ This document tracks the implementation status of the 300 features planned for O
 123. **Bracket pair colorization** - BracketColorizer.ts
 124. **Bracket pair guides** - BracketColorizer supports guides
 125. **Trailing spaces highlight** - TrailingSpaces.ts
-126. **Whitespace visualization** - Can be enabled
+126. **Whitespace visualization** - (Planned) Not yet implemented
 127. **Tab visualization** - Supported in editor
-128. **End of line markers** - Can be added
+128. **End of line markers** - (Planned) Not yet implemented
 129. **Word highlight** - Supported
 130. **Symbol highlight** - NavigationEngine
 
@@ -98,9 +98,9 @@ This document tracks the implementation status of the 300 features planned for O
 141. **Auto-close brackets** - CodeActionsProvider.ts
 142. **Auto-close quotes** - CodeActionsProvider.ts
 143. **Auto-close tags** - CodeActionsProvider.ts
-144. **Auto-indent** - Editor default
+144. **Auto-indent** - (Planned) Not yet implemented
 145. **Auto-format on save** - SettingsManager supported
-146. **Format on type** - Can be enabled
+146. **Format on type** - (Planned) Not yet implemented
 147. **Trim trailing whitespace** - CodeActionsProvider.ts
 148. **Insert final newline** - CodeActionsProvider.ts
 149. **Join lines** - CodeActionsProvider.ts
@@ -119,18 +119,18 @@ This document tracks the implementation status of the 300 features planned for O
 164. **Go to type definition** - Type search
 165. **Go to references** - NavigationEngine findReferences()
 166. **Find all references** - NavigationEngine
-167. **Peek definition** - Can be implemented
-168. **Peek references** - Can be implemented
+167. **Peek definition** - (Planned) Not yet implemented
+168. **Peek references** - (Planned) Not yet implemented
 169. **Go to symbol in file** - NavigationEngine
 170. **Go to symbol in workspace** - SearchEngine
 171. **Go to line** - Supported
 172. **Go to bracket** - BracketColorizer
 173. **Go back/forward** - Editor history
-174. **Last edit location** - Can be tracked
+174. **Last edit location** - (Planned) Not yet implemented
 175. **Next/previous problem** - ErrorLens.ts
 176. **Next/previous change** - DiffEngine.ts
 177. **Next/previous match** - SearchEngine
-178. **Next/previous bookmark** - Can be added
+178. **Next/previous bookmark** - (Planned) Not yet implemented
 179. **Collapse/fold regions** - FoldingEngine.ts
 180. **Unfold all** - FoldingEngine.ts
 

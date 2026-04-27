@@ -182,6 +182,9 @@ export class CreatorOverlayPart extends Part {
 	// Flag to enable/disable webview functionality
 	private _webviewEnabled: boolean = true;
 
+	// Track if webview failure notification was already shown
+	private _webviewFailureNotified: boolean = false;
+
 	constructor(
 		@IThemeService themeService: IThemeService,
 		@IStorageService storageService: IStorageService,
@@ -280,6 +283,9 @@ export class CreatorOverlayPart extends Part {
 	 */
 	public setWebviewEnabled(enabled: boolean): void {
 		this._webviewEnabled = enabled;
+		if (enabled) {
+			this._webviewFailureNotified = false;
+		}
 	}
 
 	/**
@@ -523,15 +529,14 @@ export class CreatorOverlayPart extends Part {
 			}
 
 			// Re-check after initialization - if webview failed to initialize, abort
-			if (!this._webviewEnabled || !this.webviewElement) {
+			if (!this._webviewEnabled) {
 				console.error("Webview initialization failed - cannot open creator overlay");
-				this._notificationService.error("Creator overlay could not be opened. The webview extension may not be available.");
+				if (!this._webviewFailureNotified) {
+					this._notificationService.error("Creator overlay could not be opened. The webview extension may not be available.");
+					this._webviewFailureNotified = true;
+				}
 				this.openInProgress = false;
 				return;
-			}
-
-			if (!this.webviewElement) {
-				throw new Error("webviewElement is not initialized");
 			}
 
 			if (this.state === "open" || !this.overlayContainer) {
@@ -737,7 +742,10 @@ export class CreatorOverlayPart extends Part {
 
 		if (!this._webviewEnabled) {
 			console.warn("Creator overlay webview not available - extension may not be built");
-			this._notificationService.warn("Creator overlay webview not available. The extension may not be built properly.");
+			if (!this._webviewFailureNotified) {
+				this._notificationService.warn("Creator overlay webview not available. The extension may not be built properly.");
+				this._webviewFailureNotified = true;
+			}
 			return;
 		}
 
