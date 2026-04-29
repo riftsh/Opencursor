@@ -1,24 +1,32 @@
 name: OpenCursor Reviewer
+
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review, synchronize]
   issue_comment:
     types: [created]
 
 jobs:
   review:
+    if: ${{ github.event.sender.type != 'Bot' }}
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
       contents: read
     steps:
-      - name: Run PR Agent
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OpenCursor Reviewer
         uses: the-pr-agent/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          config.model: "gemini/gemini-2.5-pro"
+          CONFIG.MODEL: "gemini/gemini-2.5-pro"
+          CONFIG.FALLBACK_MODELS: '["gemini/gemini-2.5-flash"]'
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "true"
           github_action_config.auto_improve: "true"
+          pr_reviewer.enable_review_labels_effort: "true"
+          pr_reviewer.enable_auto_approval: "true"
